@@ -43,13 +43,13 @@
         player.configure({
             drm: {
                 clearKeys: {
-                    '00168e766184ccb1e185107acbfe9d81': 'cf26996b0dddb4142ae52ba3013434f3'
+                    '970c2df2e10142f19a9fb63297ce28d3': 'e6f8f71c1d37155052d4981217e1f2f2'
                 }
             }
         });
 
         // Carregar o vídeo
-        const mpdUrl = 'https://g006-vod-us-cmaf-prd-mc.cdn.peacocktv.com/pub/global/XGO/br4/GMO_00000000510504_01/PCK_1728814336767_8e3c_01/mpeg_cenc/master_cmaf.mpd';
+        const mpdUrl = 'https://vod-tvg-pe-03.video.globo.com/j/eyJhbGciOiJSUzUxMiIsImtpZCI6IjEiLCJ0eXAiOiJKV1QifQ.eyJjb3VudHJ5X2NvZGUiOiJCUiIsImRvbWFpbiI6InZvZC10dmctcGUtMDMudmlkZW8uZ2xvYm8uY29tIiwiZXhwIjoxNzI5MTk4MDY1LCJpYXQiOjE3MjkxOTM2MzcsImlzcyI6InBsYXliYWNrLWFwaS1wcm9kLWdjcCIsIm93bmVyIjoiNDRhNjk2MWQtN2ZjZS00ZjEwLTgyMzUtMjY4MTg5Y2YxNjNiIiwicGF0aCI6Ii9yNzIwXzIxNjAvbC92Mi9hNS9hMi9iYy8xMDc0Mjg5OV9iY2NjYmIyNWI5ZDg4YjUyMmViYTNjYWM2MmIzMjhmZWVkYjA3MDFiLzEwNzQyODk5LWJBZFRleS1tYW5pZmVzdF9oZXZjLmlzbS8xMDc0Mjg5OS5tcGQifQ.oDpbKSmWW-U7-ZmrgYd63Bcj5f6CRdCBL70eoNBPycHgC7LMK8QYTSE7EIj_-9ydUU0SKttv0ulwx5pbYUhcY12wkQfufiNwdpJto01hlurR8dx7FHGVv87ZEKuKScMsCFhk02HxMGrXNawPImJmCW7jdDaQ-rwZ7yp9c-BIfI8h5RQ-Jyxj8sXCHtHmd7B4uA1kqeMccRo8C9K3lO9km-dE5-IjhKuHvRGvRp5S8SHHKDnubFDr3sZhEf9ddGB02DtzY4C9rLfLlEqZeGi2Kkh5KDqO6uy3B7X1RHS2XPXwDO8ZoEKN6pRrJscYKDuEloUT41lP4J9L6HaXLCpT7Q/r720_2160/l/v2/a5/a2/bc/10742899_bcccbb25b9d88b522eba3cac62b328feedb0701b/10742899-bAdTey-manifest_hevc.ism/10742899.mpd';
         
         try {
             await player.load(mpdUrl);
