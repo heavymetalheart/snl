@@ -1,65 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JW Player</title>
+    <title>Shaka Player - Vídeo em Tela Cheia</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shaka-player@4.9.2/dist/controls.css">
     <style>
-        /* Make the player occupy the full screen */
-        body {
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            width: 100%;
-            height: 100vh;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000000;
+            color: #ffffff; 
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #000; /* Add this line to make the background black */
-        }
-        #player {
-            width: 100%;
             height: 100vh;
+            padding: 20px;
+        }
+        video {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            outline: none;
         }
     </style>
 </head>
 <body>
-    <div id="player"></div>
-    <script src="https://content.jwplatform.com/libraries/KB5zFt7A.js"></script>
-    <script>
-        jwplayer("player").setup({
-        	"playlist": [
-        		{
-        			"sources": [
-        				null,
-        				{
-        					"default": false,
-        					"type": "mpd",
-        					"file": "https://g006-vod-us-cmaf-prd-ll.cdn.peacocktv.com/pub/global/bQS/DFo/PCK_1690309492912.4294_01/cmaf/mpeg_cenc/master_cmaf.mpd",
-        					"drm": {
-        						"clearkey": {
-        							"keyId": "0016265274019d6d3623dddbc26fa586",
-        							"key": "1fd41c18457afe2da8abfa9bef4cfd4e"
-        						}
-        					},
-        					"label": "1"
-        				},
-        				{
-        					"default": true,
-        					"type": "mpd",
-        					"file": "https://g006-vod-us-cmaf-prd-ll.cdn.peacocktv.com/pub/global/bQS/DFo/PCK_1690309492912.4294_01/cmaf/mpeg_cenc/master_cmaf.mpd",
-        					"drm": {
-        						"widevine": {},
-        						"playready": {}
-        					},
-        					"label": "2"
-        				}
-        			]
-        		}
-        	],
-        	"primary": "html5",
-        	"hlshtml": true,
-        	"autostart": false
+
+<video id="videoPlayer" controls></video>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.9.2/shaka-player.compiled.js"></script>
+<script>
+    async function initApp() {
+        const video = document.getElementById('videoPlayer');
+        const player = new shaka.Player(video);
+
+        // Configuração da chave de descriptografia
+        player.configure({
+            drm: {
+                clearKeys: {
+                    '00168e766184ccb1e185107acbfe9d81': 'cf26996b0dddb4142ae52ba3013434f3'
+                }
+            }
         });
-    </script>
+
+        // Carregar o vídeo
+        const mpdUrl = 'https://g006-vod-us-cmaf-prd-mc.cdn.peacocktv.com/pub/global/XGO/br4/GMO_00000000510504_01/PCK_1728814336767_8e3c_01/mpeg_cenc/master_cmaf.mpd';
+        
+        try {
+            await player.load(mpdUrl);
+            video.play();
+        } catch (error) {
+            console.error('Erro ao carregar o vídeo:', error);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', initApp);
+</script>
+
 </body>
 </html>
