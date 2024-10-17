@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JW Player</title>
+    <style>
+        /* Make the player occupy the full screen */
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #000; /* Add this line to make the background black */
+        }
+        #player {
+            width: 100%;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <div id="player"></div>
+    <script src="https://content.jwplatform.com/libraries/KB5zFt7A.js"></script>
+    <script>
+        jwplayer("player").setup({
+        	"playlist": [
+        		{
+        			"sources": [
+        				null,
+        				{
+        					"default": false,
+        					"type": "mpd",
+        					"file": "https://g006-vod-us-cmaf-prd-ll.cdn.peacocktv.com/pub/global/bQS/DFo/PCK_1690309492912.4294_01/cmaf/mpeg_cenc/master_cmaf.mpd",
+        					"drm": {
+        						"clearkey": {
+        							"keyId": "0016265274019d6d3623dddbc26fa586",
+        							"key": "1fd41c18457afe2da8abfa9bef4cfd4e"
+        						}
+        					},
+        					"label": "1"
+        				},
+        				{
+        					"default": true,
+        					"type": "mpd",
+        					"file": "https://g006-vod-us-cmaf-prd-ll.cdn.peacocktv.com/pub/global/bQS/DFo/PCK_1690309492912.4294_01/cmaf/mpeg_cenc/master_cmaf.mpd",
+        					"drm": {
+        						"widevine": {},
+        						"playready": {}
+        					},
+        					"label": "2"
+        				}
+        			]
+        		}
+        	],
+        	"primary": "html5",
+        	"hlshtml": true,
+        	"autostart": false
+        });
+    </script>
+</body>
+</html>
