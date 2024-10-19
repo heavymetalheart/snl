@@ -3,64 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SNL</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shaka-player@4.9.2/dist/controls.css">
+    <title>SNL: Ariana Grande</title>
+    <link rel="icon" href="0_crop.png" type="image/png"> <!-- Favicon -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/3.0.7/shaka-player.ui.min.js" integrity="sha512-KpD7UW8aOliftdEvclj0KBnwh6vKS708SS41xCNr11yjCSAcYxb4+tlaQTfK+GDw2VCv2DxiM2Zu1d3+WqXw+g==" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/3.0.7/controls.min.css" integrity="sha512-XLwXArwaPbtdmlcbaeNgSF3cBB4Q7T7ptfhEfpkDIc/gkvKk8S413yzTByJ7X9dgOZR/T7NxrQI0HE4hlc+2GQ==" crossorigin="anonymous" />
+    <script defer src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>
     <style>
-        * {
-            box-sizing: border-box;
+        /* Estilos para ocupar a página inteira */
+        html, body {
             margin: 0;
             padding: 0;
-        }
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #000000;
-            color: #ffffff; 
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            padding: 20px;
-        }
-        video {
             width: 100%;
-            height: auto;
-            border-radius: 8px;
-            outline: none;
+            height: 100%;
+            background-color: black; /* Fundo preto */
+            color: white; /* Cor do texto, se necessário */
+        }
+        #video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Faz com que o vídeo cubra toda a área */
         }
     </style>
 </head>
 <body>
+    <div data-shaka-player-container style="width:100%; height:100%;" data-shaka-player-cast-receiver-id="930DEB06">
+        <video data-shaka-player id="video" poster="https://imageservice.disco.peacocktv.com/uuid/84d17498-c2e0-3eb8-aaf0-06b5356a0e02/LAND_16_9/0?language=eng&territory=US&proposition=NBCUOTT&version=578afe80-7904-3077-9a27-cbc58a7bbaa1&image-format=png"></video>
+    </div>
 
-<video id="videoPlayer" controls></video>
+    <script>
+        const manifestUri = 'https://g006-vod-us-cmaf-prd-mc.cdn.peacocktv.com/pub/global/XGO/br4/GMO_00000000510504_01/PCK_1728814336767_8e3c_01/mpeg_cenc/master_cmaf.mpd';
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.9.2/shaka-player.compiled.js"></script>
-<script>
-    async function initApp() {
-        const video = document.getElementById('videoPlayer');
-        const player = new shaka.Player(video);
+        // Define as chaves de descriptografia
+        const clearkeys = {
+            '00168e766184ccb1e185107acbfe9d81': 'cf26996b0dddb4142ae52ba3013434f3'
+        };
 
-        // Configuração da chave de descriptografia
-        player.configure({
-            drm: {
-                clearKeys: {
-                    '00168e766184ccb1e185107acbfe9d81': 'cf26996b0dddb4142ae52ba3013434f3'
-                }
+        async function init() {
+            const video = document.getElementById('video');
+            const ui = video['ui'];
+            const controls = ui.getControls();
+            const player = controls.getPlayer();
+
+            // Anexar player e ui à janela para fácil acesso no console JS.
+            window.player = player;
+            window.ui = ui;
+
+            // Configurar as chaves de descriptografia
+            player.configure('drm.clearKeys', clearkeys);
+
+            // Ouvir eventos de erro.
+            player.addEventListener('error', onPlayerErrorEvent);
+            controls.addEventListener('error', onUIErrorEvent);
+
+            // Tentar carregar um manifesto.
+            try {
+                await player.load(manifestUri);
+                console.log('O vídeo foi carregado com sucesso!');
+            } catch (error) {
+                onPlayerError(error);
             }
-        });
-
-        // Carregar o vídeo
-        const mpdUrl = 'https://g006-vod-us-cmaf-prd-mc.cdn.peacocktv.com/pub/global/XGO/br4/GMO_00000000510504_01/PCK_1728814336767_8e3c_01/mpeg_cenc/master_cmaf.mpd';
-        
-        try {
-            await player.load(mpdUrl);
-            video.play();
-        } catch (error) {
-            console.error('Erro ao carregar o vídeo:', error);
         }
-    }
 
-    document.addEventListener('DOMContentLoaded', initApp);
-</script>
+        function onPlayerErrorEvent(errorEvent) {
+            onPlayerError(errorEvent.detail);
+        }
 
+        function onPlayerError(error) {
+            console.error('Código de erro', error.code, 'objeto', error);
+        }
+
+        function onUIErrorEvent(errorEvent) {
+            onPlayerError(errorEvent.detail);
+        }
+
+        function initFailed(errorEvent) {
+            console.error('Não foi possível carregar a biblioteca UI!');
+        }
+
+        document.addEventListener('shaka-ui-loaded', init);
+        document.addEventListener('shaka-ui-load-failed', initFailed);
+    </script>
 </body>
 </html>
